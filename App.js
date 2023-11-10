@@ -39,7 +39,7 @@ const screenOptions = {
 
 function Root() {
   return (
-    <Drawer.Navigator drawerContent={props => <CustomDrawer {...props}/> }  >
+    <Drawer.Navigator drawerContent={props => <CustomDrawer {...props}/> } >
     <Drawer.Screen name='Home' component={Homescreen} options={{
       drawerIcon: () => (
         <MaterialCommunityIcons name="home-battery" size={24} color="'rgba(111, 202, 186, 1)'" />
@@ -60,7 +60,7 @@ function Root() {
 }
 
 function App() {
-  const [user, setUser] = useState(true);
+  const [user, setUser] = useState(false);
   return (
     <NavigationContainer theme={NavTheme}>
       <Stack.Navigator screenOptions={{headerShown:false}}>
