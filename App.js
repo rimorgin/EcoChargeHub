@@ -29,17 +29,20 @@ const NavTheme = {
 };
 
 const screenOptions = {
-  title:'EcoChargeHub',
-  headerShown:true, 
+  headerShown:false, 
   lazy: false,
-  overlayColor: 'transparent',
-  drawerIcon: ({ focused, size, color }) => <FontAwesome5 name="charging-station" size={24} color="green" />,
   headerPressColor: 'rgba(111, 202, 186, 1)', 
+  drawerLabelStyle: {
+    marginLeft: -25,
+    fontSize: 18,
+    padding: 9,
+  },
+  drawerHideStatusBarOnOpen: true,
 }
 
 function Root() {
   return (
-    <Drawer.Navigator drawerContent={props => <CustomDrawer {...props}/> } >
+    <Drawer.Navigator drawerContent={props => <CustomDrawer {...props}/> } screenOptions={screenOptions} initialRouteName='Home'>
     <Drawer.Screen name='Home' component={Homescreen} options={{
       drawerIcon: () => (
         <MaterialCommunityIcons name="home-battery" size={24} color="'rgba(111, 202, 186, 1)'" />
@@ -60,23 +63,21 @@ function Root() {
 }
 
 function App() {
-  const [user, setUser] = useState(false);
+  const [user, setUser] = useState(true);
   return (
     <>
       <NavigationContainer theme={NavTheme}>
         <Stack.Navigator screenOptions={{headerShown:false}}>
-        {user ? (
-        <Stack.Group>
-          <Stack.Screen name="Root" component={Root} />
-        </Stack.Group>
-        ) : (
-        <Stack.Group>
-          <Stack.Screen name="Login/Register" component={LoginAndRegis} />
-          <Stack.Screen name="OTP Login/Register" component={GetStartedOTP} options={{ headerShown: true}}/>
-        </Stack.Group>
-        )}
-          
-
+          {user ? (
+          <Stack.Group>
+            <Stack.Screen name="Root" component={Root} />
+          </Stack.Group>
+          ) : (
+          <Stack.Group>
+            <Stack.Screen name="Login/Register" component={LoginAndRegis} />
+            <Stack.Screen name="OTP Login/Register" component={GetStartedOTP} options={{ headerShown: true}}/>
+          </Stack.Group>
+          )}
         </Stack.Navigator>
       </NavigationContainer>
       <Toast />

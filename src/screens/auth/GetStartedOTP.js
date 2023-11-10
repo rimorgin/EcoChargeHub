@@ -1,16 +1,12 @@
-import React from 'react'
-import { Pressable, StyleSheet, Text, useWindowDimensions, Image, View, TouchableWithoutFeedback, Keyboard } from 'react-native'
+import React, {useState, useRef} from 'react'
+import { Pressable, StyleSheet, Text, useWindowDimensions, Image, View, TouchableWithoutFeedback, Keyboard, TextInput } from 'react-native'
 import { Shadow } from 'react-native-shadow-2';
 
 function GetStartedOTP() {
     const {width, height} = useWindowDimensions();
-    //firebase variables
-    const recaptchaVerifier = useRef(null)
     const [phoneNumber, setPhoneNumber] = useState('');
     const [verificationId, setVerificationId] = useState()
     const [verificationCode, setVerificationCode] = useState()
-    const firebaseConfig = app ? app.options : undefined;
-    const attemptInvisibleVerification = true
     const [visible, setVisible] = useState(false);
 
 
@@ -227,7 +223,7 @@ function GetStartedOTP() {
                 <Shadow style={{borderRadius: 30}}>
                     <Pressable id='sign-in-button' style={styles.actionButton} onPress={verifyCode} disabled={!verificationCode}>
                         <Image 
-                            source={require('../images/arrowButton.png')}
+                            source={require('../../../assets/images/arrowButton.png')}
                             style={styles.actionButton}
                         />
                     </Pressable>
