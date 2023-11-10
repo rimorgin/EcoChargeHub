@@ -90,7 +90,7 @@ function LoginAndRegis({navigation}) {
   return (
     <View style={styles.container}>
         <Image
-            source={require('../../../assets/images/ev.png')}
+            source={require('../../../assets/images/green-energy.gif')}
             style={styles.logo}
         />
         <Text style={styles.appName} >EcoChargeHub</Text>
