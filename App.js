@@ -1,20 +1,84 @@
+import 'react-native-gesture-handler'
+import React, { useState } from 'react'
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, Button } from 'react-native';
+import { NavigationContainer, DefaultTheme  } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import Homescreen from './src/screens/home';
+import Profile from './src/screens/profile';
+import Settings from './src/screens/settings';
+import CustomDrawer from './src/components/CustomDrawer';
+import ExpoStatusBar from 'expo-status-bar/build/ExpoStatusBar';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import LoginAndRegis from './src/screens/auth/LoginRegis';
+import GetStartedOTP from './src/screens/auth/GetStartedOTP';
 
-export default function App() {
+
+const Drawer = createDrawerNavigator();
+const Stack = createNativeStackNavigator();
+
+const NavTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: 'rgba(111, 202, 186, 1)',
+  },
+};
+
+const screenOptions = {
+  title:'EcoChargeHub',
+  headerShown:true, 
+  lazy: false,
+  overlayColor: 'transparent',
+  drawerIcon: ({ focused, size, color }) => <FontAwesome5 name="charging-station" size={24} color="green" />,
+  headerPressColor: 'rgba(111, 202, 186, 1)', 
+}
+
+function Root() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Drawer.Navigator drawerContent={props => <CustomDrawer {...props}/> }  >
+    <Drawer.Screen name='Home' component={Homescreen} options={{
+      drawerIcon: () => (
+        <MaterialCommunityIcons name="home-battery" size={24} color="'rgba(111, 202, 186, 1)'" />
+      )
+    }}/>
+    <Drawer.Screen name='Profile' component={Profile} options={{
+      drawerIcon: () => (
+        <MaterialCommunityIcons name="face-man-profile" size={24} color="'rgb(46, 196, 182)" />
+      )
+    }}/>
+    <Drawer.Screen name='Settings' component={Settings} options={{
+      drawerIcon: () => (
+        <Feather name="settings" size={24} color={'rgba(111, 202, 186, 1)'} />
+      )
+    }}/>
+  </Drawer.Navigator>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+function App() {
+  const [user, setUser] = useState(true);
+  return (
+    <NavigationContainer theme={NavTheme}>
+      <Stack.Navigator screenOptions={{headerShown:false}}>
+      {user ? (
+      <Stack.Group>
+        <Stack.Screen name="Root" component={Root} />
+      </Stack.Group>
+      ) : (
+      <Stack.Group>
+        <Stack.Screen name="Login/Register" component={LoginAndRegis} />
+        <Stack.Screen name="OTP Login/Register" component={GetStartedOTP} options={{ headerShown: true}}/>
+      </Stack.Group>
+      )}
+        
+
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+export default App;
