@@ -15,7 +15,7 @@ import { Feather } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import LoginAndRegis from './src/screens/auth/LoginRegis';
 import GetStartedOTP from './src/screens/auth/GetStartedOTP';
-
+import Toast from 'react-native-toast-message';
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -62,22 +62,25 @@ function Root() {
 function App() {
   const [user, setUser] = useState(false);
   return (
-    <NavigationContainer theme={NavTheme}>
-      <Stack.Navigator screenOptions={{headerShown:false}}>
-      {user ? (
-      <Stack.Group>
-        <Stack.Screen name="Root" component={Root} />
-      </Stack.Group>
-      ) : (
-      <Stack.Group>
-        <Stack.Screen name="Login/Register" component={LoginAndRegis} />
-        <Stack.Screen name="OTP Login/Register" component={GetStartedOTP} options={{ headerShown: true}}/>
-      </Stack.Group>
-      )}
-        
+    <>
+      <NavigationContainer theme={NavTheme}>
+        <Stack.Navigator screenOptions={{headerShown:false}}>
+        {user ? (
+        <Stack.Group>
+          <Stack.Screen name="Root" component={Root} />
+        </Stack.Group>
+        ) : (
+        <Stack.Group>
+          <Stack.Screen name="Login/Register" component={LoginAndRegis} />
+          <Stack.Screen name="OTP Login/Register" component={GetStartedOTP} options={{ headerShown: true}}/>
+        </Stack.Group>
+        )}
+          
 
-      </Stack.Navigator>
-    </NavigationContainer>
+        </Stack.Navigator>
+      </NavigationContainer>
+      <Toast />
+    </>
   );
 }
 
