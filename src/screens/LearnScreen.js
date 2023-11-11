@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-export default function MapScreen() {
+export default function LearnScreen() {
   return (
     <View>
-      <Text>MapScreen</Text>
+      <Text>LearnScreen</Text>
     </View>
   )
 }

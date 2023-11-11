@@ -14,8 +14,6 @@ const CustomDrawer = (props) => {
             paddingTop: 20,
             paddingBottom: 20,
             flexDirection: 'row',
-            borderBottomWidth:1.5,
-            borderBottomColor: '#000'
         },
         userview: {
             marginLeft: 5,
@@ -32,10 +30,11 @@ const CustomDrawer = (props) => {
             paddingTop: 8
         },
         footer: {
-            borderTopWidth: 1.5,
-            borderTopColor: '#000',
-            backgroundColor: 'rgb(112, 168, 254)',
-            paddingBottom: 15
+            borderTopWidth: 1,
+            borderTopColor: '#B4B4B4',
+            backgroundColor: '#fff', //'rgb(112, 168, 254)'
+            paddingBottom: 15,
+            borderRadius: 30
         },
         footerItems: {
             paddingTop: 30,
@@ -47,7 +46,7 @@ const CustomDrawer = (props) => {
             paddingTop: 5,
             paddingLeft: 18,
             fontSize: 18,
-            color: '#fff'
+            color: '#000'
         }
 
     })
@@ -69,11 +68,11 @@ const CustomDrawer = (props) => {
         </DrawerContentScrollView>
         <View style={styles.footer}>  
             <TouchableOpacity style={styles.footerItems}>
-                <MaterialIcons name="support-agent" size={30}  color={'#fff'} />
+                <MaterialIcons name="support-agent" size={30}  color={'rgb(46, 196, 182)'} />
                 <Text style={styles.footerText}>Support</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.footerItems}>
-                <AntDesign name="logout" size={30} color={'#fff'} />
+                <AntDesign name="logout" size={30} color={'rgb(46, 196, 182)'} />
                 <Text style={styles.footerText}>Log out</Text>
             </TouchableOpacity>
             

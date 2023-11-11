@@ -17,6 +17,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import LoginAndRegis from './src/screens/auth/LoginRegis';
 import GetStartedOTP from './src/screens/auth/GetStartedOTP';
 import Toast from 'react-native-toast-message';
+import MapScreen from './src/screens/MapScreen';
+import LearnScreen from './src/screens/LearnScreen';
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -59,6 +61,7 @@ function Root() {
         <Feather name="settings" size={24} color={'rgba(111, 202, 186, 1)'} />
       )
     }}/>
+    
   </Drawer.Navigator>
   );
 }
@@ -73,6 +76,8 @@ function App() {
           {user ? (
           <Stack.Group>
             <Stack.Screen name="Root" component={Root} />
+            <Stack.Screen name="ChargeEV" component={MapScreen} />
+            <Stack.Screen name="LearnEV" component={LearnScreen} />
           </Stack.Group>
           ) : (
           <Stack.Group>
