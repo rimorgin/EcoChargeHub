@@ -1,7 +1,8 @@
 import 'react-native-gesture-handler'
 import React, { useState } from 'react'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView, StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
 import { NavigationContainer, DefaultTheme  } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -66,6 +67,7 @@ function App() {
   const [user, setUser] = useState(true);
   return (
     <>
+    <SafeAreaProvider>
       <NavigationContainer theme={NavTheme}>
         <Stack.Navigator screenOptions={{headerShown:false}}>
           {user ? (
@@ -81,6 +83,7 @@ function App() {
         </Stack.Navigator>
       </NavigationContainer>
       <Toast />
+      </SafeAreaProvider>
     </>
   );
 }
