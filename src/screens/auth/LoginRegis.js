@@ -1,12 +1,30 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Image, StyleSheet, Text, View, useWindowDimensions, TouchableOpacity } from 'react-native'
+import { useFonts } from 'expo-font';
 import { Shadow } from 'react-native-shadow-2';
+import * as SplashScreen from 'expo-splash-screen';
+
+SplashScreen.preventAutoHideAsync();
 
 function LoginAndRegis({navigation}) {
     const {width, height} = useWindowDimensions();
     const paddingTopLogo = height / 2 - 500;
-    const widthButtons = width - 100
+    const widthButtons = width - 100;
 
+    const [fontsLoaded] = useFonts({
+        'Hojas-De-Plata': require('../../../assets/fonts/HojasDePlata-M5We.ttf'),
+      });
+    
+
+    const onLayoutRootView = useCallback(async () => {
+        if (fontsLoaded) {
+          await SplashScreen.hideAsync();
+        }
+      }, [fontsLoaded]);
+    
+      if (!fontsLoaded) {
+        return null;
+    }
     /*
     async function handleFacebookLogin() {
     const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
@@ -40,9 +58,10 @@ function LoginAndRegis({navigation}) {
         },
         appName: {
             paddingTop: 10,
-            fontSize: 35,
+            fontSize: 50,
             fontWeight: 'bold',
-            marginBottom: 10
+            paddingBottom: 10,
+            fontFamily: 'Hojas-De-Plata'
         },
         description: {
             width: widthButtons,
@@ -88,7 +107,7 @@ function LoginAndRegis({navigation}) {
     });
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} onLayout={onLayoutRootView}>
         <Image
             source={require('../../../assets/images/green-energy.gif')}
             style={styles.logo}
