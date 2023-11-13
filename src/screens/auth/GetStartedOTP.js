@@ -1,19 +1,51 @@
 import React, {useState, useRef} from 'react'
-import { Pressable, StyleSheet, Text, useWindowDimensions, Image, View, TouchableWithoutFeedback, Keyboard, TextInput } from 'react-native'
+import { 
+    Pressable, 
+    StyleSheet, 
+    Text, useWindowDimensions, 
+    Image, 
+    View, 
+    TouchableWithoutFeedback, 
+    Keyboard, 
+    TextInput, 
+    TouchableOpacity 
+} from 'react-native'
 import { Shadow } from 'react-native-shadow-2';
+import { Ionicons } from '@expo/vector-icons';
+import {
+    CodeField,
+    Cursor,
+    useBlurOnFulfill,
+    useClearByFocusCell,
+  } from 'react-native-confirmation-code-field';
+import Toast from 'react-native-toast-message';
 
-function GetStartedOTP() {
+
+function GetStartedOTP({navigation}) {
     const {width, height} = useWindowDimensions();
     const [phoneNumber, setPhoneNumber] = useState('');
     const [verificationId, setVerificationId] = useState()
-    const [verificationCode, setVerificationCode] = useState()
+
+    const [btnDisabled, setDisabled] = useState(true)
     const [visible, setVisible] = useState(false);
+    const [verificationCode, setValue] = useState('');
+    const ref = useBlurOnFulfill({verificationCode, cellCount: CELL_COUNT});
+    const [props, getCellOnLayoutHandler] = useClearByFocusCell({
+        verificationCode,
+        setValue,
+    });
 
 
     const formatPhoneNumber = (input) => {
         const cleaned = input.replace(/\D/g, '');
        // Limit the phone number to 9 digits
         const limited = cleaned.substring(0, 10);
+
+        if (input.length == 11) {
+            setDisabled(false)
+        } else {
+            setDisabled(true)
+        }
 
         if (limited.length > 0) {
             // Use regular expression to add hyphens every three characters, except the last group
@@ -49,6 +81,7 @@ function GetStartedOTP() {
 
     const isPhoneNumberValid = () => {
         if (phoneNumber.length == 12) {
+            console.log('valid')
             verifyPhone()
         } else {
             Toast.show({
@@ -60,6 +93,8 @@ function GetStartedOTP() {
     }
     const verifyCode = async() => {
         setVisible(true);
+        console.log('code ' + verificationCode)
+        /*
         try {
             const credential = PhoneAuthProvider.credential(
                 verificationId,
@@ -88,6 +123,7 @@ function GetStartedOTP() {
                 text2: "Couldn't sign in, bad verification code ❌"
               });
         }
+        */
     }
     const styles = StyleSheet.create({
         container: {
@@ -153,12 +189,27 @@ function GetStartedOTP() {
             color: '#A9A9A9',
             fontSize: 18,
         },
-        actionButton: {
-            right: 0,
-            width: 60,
-            height: 60,
+        button: {
+            width: 68,
+            height: 70
         },
-    })
+        codeFieldRoot: {marginTop: 0},
+        cell: {
+          width: 45,
+          height: 45,
+          lineHeight: 38,
+          fontSize: 24,
+          borderWidth: 2,
+          borderColor: '#00000030',
+          textAlign: 'center',
+          margin: 3
+        },
+        focusCell: {
+          borderColor: '#000',
+        },
+      });
+      
+      const CELL_COUNT = 6;
   return (
     <>
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -188,45 +239,47 @@ function GetStartedOTP() {
             </View>    
             <View style={styles.buttoncontainer}>  
                 <Text style={styles.desctiption} >We're sending you a verification PIN to your mobile number. We use your mobile number to allow the stations to contact you about your booking.</Text>
-                <Shadow style={{borderRadius: 30}}>
-                    <Pressable id='sign-in-button' style={styles.actionButton} onPress={isPhoneNumberValid} disabled={!phoneNumber}>
-                        <Image 
-                            source={require('../../../assets/images/arrowButton.png')}
-                            style={styles.actionButton}
-                        />
-                    </Pressable>
+                <Shadow style={{borderRadius: 35, width: 60, height:60}}>
+                    <TouchableOpacity id='sign-in-button' style={styles.button} onPress={isPhoneNumberValid} disabled={btnDisabled} >
+                        <Ionicons name="ios-arrow-forward-circle" style={{left: -5, top: -10}} size={75} color={btnDisabled ? 'gray' : 'rgba(111, 202, 186, 1)'} />
+                    </TouchableOpacity>
                 </Shadow>
-
             </View>
         </>
         ) : (
         <>
         <View style={styles.TextEditContainer}>
             <Text style={styles.enterMobileText} >Enter your verification code</Text>
-            <View style={{width:width, alignItems:'center', justifyContent:'center'}}>
-            <Shadow style={{borderRadius:30}}>
-                <TextInput
-                    style={styles.inputCode}
-                    onChangeText={setVerificationCode}
-                    value={verificationCode}
-                    placeholder='- - - - - -'
-                    keyboardType='numeric'
-                    inputMode='tel'
-                    textContentType='oneTimeCode'
-                />
-                
+            <View style={{alignItems:'center', justifyContent:'center', margin: 10}}>
+            <Shadow>
+            <CodeField
+                ref={ref}
+                {...props}
+                // Use `caretHidden={false}` when users can't paste a text value, because context menu doesn't appear
+                value={verificationCode}
+                onChangeText={setValue}
+                cellCount={CELL_COUNT}
+                rootStyle={styles.codeFieldRoot}
+                keyboardType="number-pad"
+                textContentType="oneTimeCode"
+                renderCell={({index, symbol, isFocused}) => (
+                <Text
+                    key={index}
+                    style={[styles.cell, isFocused && styles.focusCell]}
+                    onLayout={getCellOnLayoutHandler(index)}>
+                    {symbol || (isFocused ? <Cursor/> : null)}
+                </Text>
+                )}
+            />
             </Shadow>
             </View>
         </View>
             <View style={styles.buttoncontainer}>  
                 <Text style={styles.desctiption} >Please check your message box for the verification PIN. Enter the PIN to complete your login.</Text>
-                <Shadow style={{borderRadius: 30}}>
-                    <Pressable id='sign-in-button' style={styles.actionButton} onPress={verifyCode} disabled={!verificationCode}>
-                        <Image 
-                            source={require('../../../assets/images/arrowButton.png')}
-                            style={styles.actionButton}
-                        />
-                    </Pressable>
+                <Shadow style={{borderRadius: 35, width: 60, height:60}}>
+                    <TouchableOpacity id='sign-in-button' style={styles.button} onPress={verifyCode} disabled={!verificationCode}>
+                        <Ionicons name="ios-arrow-forward-circle" style={{left: -5, top: -10}} size={75} color={!verificationCode ? 'gray' : 'rgba(111, 202, 186, 1)'} />
+                    </TouchableOpacity>
                 </Shadow>
             </View>
         
