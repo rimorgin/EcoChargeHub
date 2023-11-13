@@ -4,24 +4,24 @@
     "slug": "EcoChargeHub",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/green-energy-app-icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/images/green-energy-splash.gif",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": [
       "assets/images/*",
       "assets/constants/*",
-      "**/*",
+      "**/*"
     ],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/green-energy-splash.gif",
         "backgroundColor": "#ffffff"
       }
     },
