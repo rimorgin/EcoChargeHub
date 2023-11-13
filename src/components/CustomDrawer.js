@@ -4,6 +4,7 @@ import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawe
 import { Avatar } from 'react-native-elements';
 import { MaterialIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
+import { Shadow } from 'react-native-shadow-2'
 
 const CustomDrawer = (props) => {
 
@@ -16,13 +17,18 @@ const CustomDrawer = (props) => {
             flexDirection: 'row',
         },
         userview: {
-            marginLeft: 5,
-            marginTop: 10,
+            marginLeft: 8,
+            marginTop: 5,
         },
         user:{
             color:'#fff',
             fontSize: 18,
-            fontWeight: 'bold',
+            fontWeight: '900',
+            flexWrap: 'wrap',
+            width: 180,
+            textShadowColor: 'rgba(0, 0, 0, 0.75)',
+            textShadowOffset: {width: -1, height: 1},
+            textShadowRadius: 3
         },
         drawerItems: {
             flex: 1,
@@ -53,15 +59,22 @@ const CustomDrawer = (props) => {
   return (
     <View style={{flex: 1}}>
         <DrawerContentScrollView {...props} 
-            contentContainerStyle={{backgroundColor:'rgb(70, 217, 203)'}}>
+            contentContainerStyle={{backgroundColor:'#F7F7F7'}}>
+            
             <ImageBackground source={require('../../assets/images/menubg.png')} style={styles.header}>
-               <Avatar size='large' rounded source={require('../../assets/images/otaku.png')}/>
+                <Shadow startColor='#9FA0A0' style={{borderRadius: 40}}>
+                <Avatar size='large' rounded source={require('../../assets/images/otaku.png')}/>
+               </Shadow>
+               
                <View style={styles.userview}>
-                <Text style={styles.user}>Stephanie Trish Fabico</Text>
+                <Text  style={styles.user}>Stephanie Trish Fabico</Text>
                 <Text style={styles.user}>Age: 19</Text>
                 <Text style={styles.user}>Sex: Female</Text>
                </View>
+               
+               
             </ImageBackground>
+            
             <View style={styles.drawerItems}>
                 <DrawerItemList {...props}/>
             </View>
