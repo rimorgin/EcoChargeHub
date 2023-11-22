@@ -19,13 +19,18 @@ import {
     useClearByFocusCell,
   } from 'react-native-confirmation-code-field';
 import Toast from 'react-native-toast-message';
+import { auth, app } from '../../../firebaseConfig';
+import {
+    FirebaseRecaptchaVerifierModal,
+    FirebaseRecaptchaBanner,
+} from "expo-firebase-recaptcha"
+import { PhoneAuthProvider, signInWithCredential, updateProfile } from "firebase/auth"
 
 
 function GetStartedOTP({navigation}) {
     const {width, height} = useWindowDimensions();
     const [phoneNumber, setPhoneNumber] = useState('');
     const [verificationId, setVerificationId] = useState()
-
     const [btnDisabled, setDisabled] = useState(true)
     const [visible, setVisible] = useState(false);
     const [verificationCode, setValue] = useState('');
@@ -34,6 +39,9 @@ function GetStartedOTP({navigation}) {
         verificationCode,
         setValue,
     });
+    const recaptchaVerifier = useRef(null)
+    const firebaseConfig = app ? app.options : undefined;
+    const attemptInvisibleVerification = true
 
 
     const formatPhoneNumber = (input) => {
@@ -94,7 +102,7 @@ function GetStartedOTP({navigation}) {
     const verifyCode = async() => {
         setVisible(true);
         console.log('code ' + verificationCode)
-        /*
+
         try {
             const credential = PhoneAuthProvider.credential(
                 verificationId,
@@ -102,10 +110,7 @@ function GetStartedOTP({navigation}) {
             )
 
             await signInWithCredential(auth, credential)
-            
-            const user = auth.currentUser
-            const userName = user.displayName
-            await updateProfile(user)
+            console.log('ello')
             setVisible(false);
             Toast.show({
                 type: 'success',
@@ -113,7 +118,7 @@ function GetStartedOTP({navigation}) {
                 text2: 'Phone authentication successful 👍✅'
               });
             
-            navigation.navigate('Homescreen');
+            
 
         } catch (err) {
             setVisible(false);
@@ -123,7 +128,7 @@ function GetStartedOTP({navigation}) {
                 text2: "Couldn't sign in, bad verification code ❌"
               });
         }
-        */
+   
     }
     const styles = StyleSheet.create({
         container: {
@@ -207,6 +212,9 @@ function GetStartedOTP({navigation}) {
         focusCell: {
           borderColor: '#000',
         },
+        firebaseCaptchaBanner: {
+            bottom:5,
+        },
       });
       
       const CELL_COUNT = 6;
@@ -214,6 +222,13 @@ function GetStartedOTP({navigation}) {
     <>
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <View style={styles.container} >
+        <FirebaseRecaptchaVerifierModal
+                ref={recaptchaVerifier}
+                firebaseConfig={firebaseConfig}
+                attemptInvisibleVerification={attemptInvisibleVerification}
+                cancelLabel='Close'
+                title='Prove you are human!'
+        />
         {!verificationId ? (
         <>
             <View style={styles.TextEditContainer}>
@@ -233,6 +248,7 @@ function GetStartedOTP({navigation}) {
                         keyboardType='numeric'
                         inputMode='tel'
                         textContentType='telephoneNumber'
+                        placeholderTextColor={'gray'}
                     />
                 </Pressable>
             </Shadow>
@@ -259,6 +275,8 @@ function GetStartedOTP({navigation}) {
                 value={verificationCode}
                 onChangeText={setValue}
                 cellCount={CELL_COUNT}
+                placeholder='123456'
+                placeholderTextColor={'gray'}
                 rootStyle={styles.codeFieldRoot}
                 keyboardType="number-pad"
                 textContentType="oneTimeCode"
@@ -285,6 +303,7 @@ function GetStartedOTP({navigation}) {
         
         </>    
         )}
+        <FirebaseRecaptchaBanner style={styles.firebaseCaptchaBanner}/>
     </View>
     </TouchableWithoutFeedback>
     </>

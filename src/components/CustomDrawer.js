@@ -1,28 +1,44 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ImageBackground, StyleSheet, Text, View, SafeAreaView, TouchableOpacity } from 'react-native'
 import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer'
 import { Avatar } from 'react-native-elements';
 import { MaterialIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { Shadow } from 'react-native-shadow-2'
+import { auth } from '../../firebaseConfig';
 
 const CustomDrawer = (props) => {
 
+    const fullname = auth?.currentUser?.displayName
+    const email = auth?.currentUser?.email
+
+
     const styles = StyleSheet.create({
         header: {
-            height: 'auto',
+            height: 140,
             padding:10,
+            paddingLeft: 18,
             paddingTop: 20,
             paddingBottom: 20,
             flexDirection: 'row',
         },
         userview: {
             marginLeft: 8,
-            marginTop: 5,
+            marginTop: 15,
         },
         user:{
             color:'#fff',
             fontSize: 18,
+            fontWeight: '900',
+            flexWrap: 'wrap',
+            width: 180,
+            textShadowColor: 'rgba(0, 0, 0, 0.75)',
+            textShadowOffset: {width: -1, height: 1},
+            textShadowRadius: 3
+        },
+        userEmail:{
+            color: email == null ? 'yellow' : '#fff',
+            fontSize: 10,
             fontWeight: '900',
             flexWrap: 'wrap',
             width: 180,
@@ -59,17 +75,16 @@ const CustomDrawer = (props) => {
   return (
     <View style={{flex: 1}}>
         <DrawerContentScrollView {...props} 
-            contentContainerStyle={{backgroundColor:'#F7F7F7'}}>
+            contentContainerStyle={{backgroundColor:'#2EC4B6'}}>
             
-            <ImageBackground source={require('../../assets/images/menubg.png')} style={styles.header}>
-                <Shadow startColor='#9FA0A0' style={{borderRadius: 40}}>
+            <ImageBackground source={require('../../assets/images/menubg-green.png')} style={styles.header}>
+                <Shadow style={{borderRadius: 40}}>
                 <Avatar size='large' rounded source={require('../../assets/images/otaku.png')}/>
                </Shadow>
                
                <View style={styles.userview}>
-                <Text  style={styles.user}>Stephanie Trish Fabico</Text>
-                <Text style={styles.user}>Age: 19</Text>
-                <Text style={styles.user}>Sex: Female</Text>
+                <Text style={styles.user}>{fullname}</Text>
+                <Text style={styles.userEmail}>{email == null ? 'you have an unverified email' : email}</Text>
                </View>
                
                
@@ -84,7 +99,10 @@ const CustomDrawer = (props) => {
                 <MaterialIcons name="support-agent" size={30}  color={'rgb(46, 196, 182)'} />
                 <Text style={styles.footerText}>Support</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.footerItems}>
+            <TouchableOpacity style={styles.footerItems} onPress={() => 
+
+                auth.signOut()
+            }>
                 <AntDesign name="logout" size={30} color={'rgb(46, 196, 182)'} />
                 <Text style={styles.footerText}>Log out</Text>
             </TouchableOpacity>
